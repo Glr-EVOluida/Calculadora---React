@@ -18,8 +18,8 @@ class Calc extends React.Component {
     this.state = {
       v1: 0,
       v2: 0,
-      total: 0,
       op: "",
+      telaText: "",
     }
   }
 
@@ -32,30 +32,34 @@ class Calc extends React.Component {
   }
   handleClick(i){
     if(i === '-' || i === '+' || i === '*' || i === '/'){
-      const text = parseFloat(document.getElementById('tela').value)
-      this.setState({v1:text,op:i});
-      document.getElementById('tela').value = "";
+      const text = parseFloat(this.state.telaText);
+      this.setState({v1:text,op:i,telaText:""});
     }else if(i === '='){
-      const text = parseFloat(document.getElementById('tela').value)
+      const text = parseFloat(this.state.telaText)
       this.setState({v2:text}, () =>{
         const total = eval(this.state.v1+this.state.op+this.state.v2);
-        this.setState({total:total}, () =>{
-          console.log(this.state)
-          document.getElementById('tela').value = this.state.total;
-        }); 
+        this.setState({telaText:total}); 
       });
     }else if(i === 'CE'){
-      document.getElementById('tela').value = "";
-      console.log(document.getElementById('tela').value);
+      this.telaWrite("");
+      console.log(this.state.telaText);
 
     }else if(i === 'C'){
-      this.setState({v1:0,v2:0,total:0,op:""}, () => {
+      this.setState({v1:0,v2:0,op:"",telaText:""}, () => {
         console.log(this.state)
-        document.getElementById('tela').value = "";
       });
     }else{
-      document.getElementById('tela').value += i;
+      this.telaWrite(i);
     }
+  }
+
+  telaWrite(i){
+    let telaText;
+    i === "" ? telaText = "" : telaText = this.state.telaText;
+
+    this.setState({
+      telaText: telaText+i,
+    })
   }
 
   render() {
@@ -64,7 +68,7 @@ class Calc extends React.Component {
       <center>
       <div className="calc">
         <div className="board-row">
-            <textarea type="text" name="tela" id="tela" maxLength="11" disabled></textarea>
+            <textarea type="text" name="tela" id="tela" maxLength="11" value={this.state.telaText} disabled></textarea>
         </div>
         {/* <div>
             <button className="square-tudo">C</button>
