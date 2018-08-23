@@ -41,9 +41,11 @@ class Calc extends React.Component {
         this.setState({telaText:total}); 
       });
     }else if(i === 'CE'){
-      this.telaWrite("");
-      console.log(this.state.telaText);
-
+      let string = this.state.telaText;
+      let numero = string.substr(0,(string.length -1));
+      this.setState({
+        telaText: numero,
+      })
     }else if(i === 'C'){
       this.setState({v1:0,v2:0,op:"",telaText:""}, () => {
         console.log(this.state)
